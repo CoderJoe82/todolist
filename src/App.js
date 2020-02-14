@@ -135,12 +135,12 @@ class App extends Component {
               </NavLink>
             </li>
             <li>
-              <NavLink  to activeClassName="selected" to="/active">
+              <NavLink activeClassName="selected" to="/active">
                 Active
               </NavLink>
             </li>
             <li>
-              <NavLink to activeClassName="selected" to="/completed">
+              <NavLink activeClassName="selected" to="/completed">
                 Completed
               </NavLink>
             </li>
