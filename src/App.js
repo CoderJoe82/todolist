@@ -3,6 +3,13 @@ import "./index.css";
 import todosList from "./todos.json";
 import { Route, NavLink } from "react-router-dom";
 import TodoList from "./TodoList.js";
+import { connect } from "react-redux";
+import {
+  addTodo,
+  clearCompletedTodos,
+  deleteTodo,
+  toggleTodo
+} from "./actions";
 
 class App extends Component {
   state = {
@@ -10,58 +17,28 @@ class App extends Component {
   };
 
   handleRemoveChecked = event => {
-    const checkedToRemove = this.state.todos.filter(todo => {
-      if (todo.completed === true) {
-        return false;
-      }
-      return true;
-    });
-    this.setState({ todos: checkedToRemove });
-  };
-
-  handleDeleteTodo = (event, todoToDelete) => {
-    const filteredArray = this.state.todos.filter(todo => {
-      if (todo.id === todoToDelete) {
-        return false;
-      }
-      return true;
-    });
-    this.setState({ todos: filteredArray });
+    this.props.clearCompletedTodos();
   };
 
   handleToggleComplete = (event, todoIdToToggle) => {
-    const newTodos = this.state.todos.slice();
-    const moreNewTodos = newTodos.map(todo => {
-      if (todo.id === todoIdToToggle) {
-        todo.completed = !todo.completed;
-      }
-      return todo;
-    });
-    this.setState({ todos: moreNewTodos });
+    this.props.toggleTodo();
   };
 
   handleCreateTodo = event => {
     if (event.key === "Enter") {
-      const newTodo = {
-        userId: 1,
-        id: this.state.todos.length + 1,
-        title: event.target.value,
-        completed: false
-      };
-      const newTodoArray = this.state.todos.slice();
-      newTodoArray.push(newTodo);
-      this.setState({ todos: newTodoArray });
+      this.props.addTodo(event.target.value);
+
       event.target.value = "";
     }
   };
 
-  handleItemsLeft () {
+  handleItemsLeft() {
     let itemsLeftArray = this.state.todos.filter(todo => {
       if (todo.completed === true) {
-        return false
+        return false;
       }
-      return true
-    })
+      return true;
+    });
     return itemsLeftArray.length;
   }
 
@@ -77,56 +54,36 @@ class App extends Component {
             autoFocus
           />
         </header>
+        <Route exact path="/">
+          <TodoList todos={this.props.todos} />
+        </Route>
         <Route
           exact
-          path="/"
-          render={() => (
-            <TodoList
-              todos={this.state.todos}
-              handleToggleComplete={this.handleToggleComplete}
-              handleDeleteTodo={this.handleDeleteTodo}
-              handleRemoveChecked={this.handleRemoveChecked}
-            />
-          )}
-        />
-        <Route
           path="/active"
           render={() => (
             <TodoList
-              todos={this.state.todos.filter(todo => {
-                if (todo.completed === false) {
-                  return true;
-                }
-                return false;
-              })}
-              handleToggleComplete={this.handleToggleComplete}
-              handleDeleteTodo={this.handleDeleteTodo}
-              handleRemoveChecked={this.handleRemoveChecked}
+              todos={this.props.todos.filter(todo => todo.completed === false)}
             />
           )}
         />
         <Route
+          exact
           path="/completed"
           render={() => (
             <TodoList
-              todos={this.state.todos.filter(todo => {
+              todos={this.props.todos.filter(todo => {
                 if (todo.completed === false) {
                   return false;
                 }
                 return true;
               })}
-              handleToggleComplete={this.handleToggleComplete}
-              handleDeleteTodo={this.handleDeleteTodo}
-              handleRemoveChecked={this.handleRemoveChecked}
             />
           )}
         />
         <footer className="footer">
           {/* <!-- This should be `0 items left` by default --> */}
           <span className="todo-count">
-            <strong>
-              {this.handleItemsLeft()}
-            </strong> item(s) left
+            <strong>{this.handleItemsLeft()}</strong> item(s) left
           </span>
           <ul className="filters">
             <li>
@@ -157,4 +114,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    todos: state.todos
+  };
+};
+
+const mapDispatchToProps = {
+  addTodo,
+  clearCompletedTodos,
+  deleteTodo,
+  toggleTodo
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
