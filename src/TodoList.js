@@ -26,15 +26,9 @@ class TodoList extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    todos: state.todos
-  }
-}
-
 const mapDispatchToProps = {
   deleteTodo,
   toggleTodo
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default connect(null, mapDispatchToProps)(TodoList);

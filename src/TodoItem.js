@@ -9,9 +9,7 @@ class TodoItem extends Component {
               className="toggle"
               type="checkbox"
               checked={this.props.completed}
-              onChange={event =>
-                this.props.handleToggleComplete(event, this.props.id)
-              }
+              onChange={this.props.handleToggleComplete}
             />
             <label>{this.props.title}</label>
             <button className="destroy" onClick={this.props.handleDeleteTodo} />

@@ -123,7 +123,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   addTodo,
   clearCompletedTodos,
-  deleteTodo,
   toggleTodo
 };
 
