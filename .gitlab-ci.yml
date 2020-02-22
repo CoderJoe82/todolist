@@ -13,4 +13,4 @@ pages:
   only:
     - master # or dev, the branch you want to publish
 variables:
-  PUBLIC_URL: "/todo-list-part-2" # slash is important
+  PUBLIC_URL: "/todo-list-part-3" # slash is important
