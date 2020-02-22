@@ -7,7 +7,6 @@ import { connect } from "react-redux";
 import {
   addTodo,
   clearCompletedTodos,
-  deleteTodo,
   toggleTodo
 } from "./actions";
 
